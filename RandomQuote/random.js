@@ -2,9 +2,9 @@ class RandomQuote extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      myquotes: ["Winning isn’t everything, but wanting to win is."],
-      selectedQuote: "",
-      author: "",
+      myquotes: [],
+      selectedQuote: "Winning isn’t everything, but wanting to win is.",
+      author: "Vince Lombardi",
       clicked: false
     };
   }
@@ -24,6 +24,7 @@ class RandomQuote extends React.Component {
       author: this.state.myquotes[rand].author
     });
   };
+
   render() {
     const { myquotes } = this.state;
     return (
@@ -32,10 +33,33 @@ class RandomQuote extends React.Component {
           <h1 id="text">{this.state.selectedQuote}</h1>
           <h1 id="author">{this.state.author}</h1>
         </div>
-        <button onClick={this.handleClick}>NewQuote</button>
+        <div id="mybuttons">
+          <button id="new-quote" onClick={this.handleClick}>
+            NewQuote
+          </button>
+          <Button
+            currentQuote={this.state.selectedQuote}
+            currentAuthor={this.state.author}
+          />
+        </div>
       </div>
     );
   }
 }
-
+class Button extends React.Component {
+  render() {
+    return (
+      <div>
+        <a
+          id="tweet-quote"
+          href={`https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text=${
+            this.props.currentQuote
+          }#${this.props.currentAuthor}`}
+        >
+          <button>Tweet</button>
+        </a>
+      </div>
+    );
+  }
+}
 ReactDOM.render(<RandomQuote />, document.getElementById("container"));
