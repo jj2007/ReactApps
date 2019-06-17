@@ -52,9 +52,10 @@ class Button extends React.Component {
       <div>
         <a
           id="tweet-quote"
+          target="_blank"
           href={`https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text=${
             this.props.currentQuote
-          }#${this.props.currentAuthor}`}
+          }--${this.props.currentAuthor}`}
         >
           <button>Tweet</button>
         </a>
