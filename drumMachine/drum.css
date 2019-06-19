@@ -7,13 +7,29 @@
   display: flex;
   border-radius: 5%;
   padding: 10px;
+  background-color: #94dde0;
 }
 .drum-pad {
   border-radius: 20%;
+  width: 60px;
+  height: 60px;
+  background-color: white;
+  text-align: center;
+  padding-top: 25px;
 }
 #buttons {
   display: grid;
   grid-template-columns: 70px 70px 70px;
-  grid-column-gap: 5px;
-  grid-row-gap: 5px;
+}
+#display {
+  padding: 10px;
+}
+#display p {
+  padding: 30px;
+  border: 10px;
+  border-color: #354743;
+  background-color: #6eafa2;
+  width: 50px;
+  text-align: center;
+  border-radius: 20%;
 }
