@@ -1,0 +1,19 @@
+#drum-machine {
+  margin: 30px;
+  height: 300px;
+  border: 10p;
+  border-color: #a3b3cc;
+  border-style: inset;
+  display: flex;
+  border-radius: 5%;
+  padding: 10px;
+}
+.drum-pad {
+  border-radius: 20%;
+}
+#buttons {
+  display: grid;
+  grid-template-columns: 70px 70px 70px;
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+}
