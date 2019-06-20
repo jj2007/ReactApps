@@ -65,16 +65,14 @@ class App extends React.Component {
       <div id="drum-machine">
         <div id="buttons">
           {bankOne.map(obj => (
-            <div>
-              <Audio key={obj.keyTrigger} src={obj.url}>
+            <div key={obj.keyCode}>
+              <Audio src={obj.url} value={obj.keyCode} name={obj.id}>
                 {obj.keyTrigger}
               </Audio>
             </div>
           ))}
         </div>
-        <div id="display">
-          <p>Test</p>
-        </div>
+        <div id="display" />
       </div>
     );
   }
@@ -84,28 +82,35 @@ class Audio extends React.Component {
     super(props);
   }
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKey);
+    document.addEventListener("keydown", this.playSound);
   }
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKey);
+  componentWillUnMount() {
+    document.removeEventListener("keydown", this.handleKeyPress);
   }
-  handleKey(e) {
-    if (e.keyCode === this.props.key) {
-      this.playSound();
+  handleKeyPress = e => {
+    if (e.keyCode === this.props.value) {
+      this.playsound;
     }
-  }
+  };
   playSound = e => {
     const sound = document.getElementById(this.props.children);
     sound.currentTime = 0;
     sound.play();
+    document.getElementById("display").innerHTML = this.props.name;
   };
   render() {
-    const { children, src, key } = this.props;
+    const { children, src, value, name } = this.props;
     return (
-      <div onClick={this.playSound} className="drum-pad">
-        <audio id={children} src={src} />
+      <button
+        onKeyDown={this.handleKeyPress}
+        onClick={this.playSound}
+        className="drum-pad btn btn-danger"
+        id={name}
+      >
+        <audio id={children} src={src} className="clip" />
+        <i class="fas fa-drum-steelpan" />
         {children}
-      </div>
+      </button>
     );
   }
 }
