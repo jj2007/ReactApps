@@ -82,14 +82,14 @@ class Audio extends React.Component {
     super(props);
   }
   componentDidMount() {
-    document.addEventListener("keydown", this.playSound);
+    document.addEventListener("keydown", this.handleKeyPress);
   }
   componentWillUnMount() {
     document.removeEventListener("keydown", this.handleKeyPress);
   }
   handleKeyPress = e => {
     if (e.keyCode === this.props.value) {
-      this.playsound;
+      this.audioRef.play();
     }
   };
   playSound = e => {
@@ -107,7 +107,14 @@ class Audio extends React.Component {
         className="drum-pad btn btn-danger"
         id={name}
       >
-        <audio id={children} src={src} className="clip" />
+        <audio
+          ref={input => {
+            this.audioRef = input;
+          }}
+          id={children}
+          src={src}
+          className="clip"
+        />
         <i class="fas fa-drum-steelpan" />
         {children}
       </button>
