@@ -29,12 +29,17 @@ class RandomQuote extends React.Component {
     const { myquotes } = this.state;
     return (
       <div id="quote-box">
-        <div>
-          <h1 id="text">{this.state.selectedQuote}</h1>
-          <h1 id="author">{this.state.author}</h1>
+        <div id="display">
+          <div id="text">{this.state.selectedQuote}</div>
+          <div id="author">{this.state.author}</div>
         </div>
         <div id="mybuttons">
-          <button id="new-quote" onClick={this.handleClick}>
+          <button
+            className="btn btn-primary"
+            id="new-quote"
+            onClick={this.handleClick}
+          >
+            <i className="fa fa-quote-right" />
             NewQuote
           </button>
           <Button
@@ -57,7 +62,9 @@ class Button extends React.Component {
             this.props.currentQuote
           }--${this.props.currentAuthor}`}
         >
-          <button>Tweet</button>
+          <button className="btn btn-info" type="button">
+            <i className="fa fa-twitter" />Tweet
+          </button>
         </a>
       </div>
     );

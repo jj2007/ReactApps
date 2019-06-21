@@ -1,3 +1,38 @@
+@import url("https://fonts.googleapis.com/css?family=B612+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Mali&display=swap");
 #container {
-  background-color: yellow;
+  padding: 30px;
+  background-color: #bae8a4;
+}
+#display {
+  padding: 30px;
+  margin: 20px;
+  border: 4mm ridge rgba(170, 50, 220, 0.6);
+  border-radius: 10px;
+  background-color: #d29de0;
+  font-family: "B612 Mono", sans-serif;
+}
+#text,
+#author {
+  font-size: 20px;
+}
+#author {
+  color: #d3511d;
+}
+#mybuttons {
+  display: flex;
+  justify-content: space-evenly;
+}
+#author {
+  font-family: Mali, sans-serif;
+}
+button {
+  padding: 10px;
+  border-radius: 50px;
+  background-color: #7c046a;
+  border: 2px solid #ba2e0f; /* Green */
+}
+button:hover {
+  background-color: #4c1f50;
+  color: white;
 }
