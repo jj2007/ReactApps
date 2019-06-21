@@ -63,6 +63,9 @@ class App extends React.Component {
   render() {
     return (
       <div id="drum-machine">
+        <div id="header">
+          <b>React</b>ive Drum Machine
+        </div>
         <div id="buttons">
           {bankOne.map(obj => (
             <div key={obj.keyCode}>
@@ -89,7 +92,10 @@ class Audio extends React.Component {
   }
   handleKeyPress = e => {
     if (e.keyCode === this.props.value) {
-      this.audioRef.play();
+      this.audRef.play();
+      this.btn.focus();
+      //setTimeout(() => this.btn.focus(), 100);
+      document.getElementById("display").innerHTML = this.props.name;
     }
   };
   playSound = e => {
@@ -106,11 +112,10 @@ class Audio extends React.Component {
         onClick={this.playSound}
         className="drum-pad btn btn-danger"
         id={name}
+        ref={input => (this.btn = input)}
       >
         <audio
-          ref={input => {
-            this.audioRef = input;
-          }}
+          ref={input => (this.audRef = input)}
           id={children}
           src={src}
           className="clip"
