@@ -1,0 +1,21 @@
+#clock {
+  display: grid;
+  grid:
+    "header header" 100px
+    "breaks session" 200px
+    "timer timer" 200px
+    "control control" 100px
+    / 50% 50%;
+}
+#break-label {
+  grid-area: breaks;
+}
+#session-label {
+  grid-area: session;
+}
+#timer-label {
+  grid-area: timer;
+}
+#controls {
+  grid-area: control;
+}

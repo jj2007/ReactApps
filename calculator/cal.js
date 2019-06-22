@@ -25,9 +25,6 @@ class Calculator extends React.Component {
       result: ""
     };
   }
-  componentDidMount() {
-    //document.getElementById("display").innerHTML = this.state.number;
-  }
   handleClick = e => {
     if (e.target.dataset.value === "C") {
       this.setState({
@@ -35,7 +32,10 @@ class Calculator extends React.Component {
         result: "0"
       });
     } else if (e.target.dataset.value === ".") {
-      if (/\.$/.test(this.state.expr)) {
+      if (
+        /\.$/.test(this.state.expr) &&
+        /(?<!\+|\*|\/|-)$/.test(this.state.expr)
+      ) {
         this.setState({
           expr: this.state.expr
         });
@@ -59,27 +59,26 @@ class Calculator extends React.Component {
           )
         });
       } else {
+        let newexpr = this.state.expr.toString();
         this.setState({
-          expr: this.state.expr
-            .concat(e.target.dataset.value)
-            .replace(/^0+/, "0")
+          expr: newexpr.concat(e.target.dataset.value).replace(/^0+/, "0"),
+          result: newexpr.concat(e.target.dataset.value).replace(/^0+/, "0")
         });
       }
     } else if (e.target.dataset.value === "=") {
       this.setState({
-        result: eval(this.state.expr.replace(/^0+/, ""))
+        result: eval(this.state.expr.replace(/^0+/, "")),
+        expr: eval(this.state.expr.replace(/^0+/, ""))
       });
     }
   };
   render() {
     return (
       <div id="calculator">
-        <div id="display2" style={{ backgroundColor: "#758c74" }}>
+        <Display id="display2" style={{ backgroundColor: "#758c74" }}>
           {this.state.expr}
-        </div>
-        <div id="display" ref={elem => (this.elem = elem)}>
-          {this.state.result}
-        </div>
+        </Display>
+        <Display id="display">{this.state.result}</Display>
         <div id="numbers" className="buttons">
           {arr.map(item => (
             <div key={item.keyName}>
@@ -97,10 +96,10 @@ class Calculator extends React.Component {
     );
   }
 }
-class Display extends React.Component {
-  render() {
-    const { children, id, onClick } = this.props;
-    return <button type="button">{children}</button>;
-  }
-}
+const Display = ({ children, id, style }) => (
+  <div id={id} style={style}>
+    {children}
+  </div>
+);
+
 ReactDOM.render(<Calculator />, document.getElementById("container"));
