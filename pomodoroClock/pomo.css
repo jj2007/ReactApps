@@ -1,21 +1,46 @@
+@import url("https://fonts.googleapis.com/css?family=Dosis&display=swap");
 #clock {
+  font-family: "Dosis", sans-serif;
+  background-color: #1f2530;
+  color: #eaf0f9;
+  padding: 15px;
   display: grid;
   grid:
     "header header" 100px
     "breaks session" 200px
-    "timer timer" 200px
+    "timer timer" 100px
     "control control" 100px
     / 50% 50%;
+  justify-content: space-around;
+  align-content: space-around;
+  text-align: center;
+}
+header {
+  grid-area: header;
 }
 #break-label {
+  margin: 10px;
+  background-color: #51a6ad;
   grid-area: breaks;
+  padding: 10px;
+  border-radius: 10px;
 }
 #session-label {
+  margin: 10px;
+  background-color: #51a6ad;
   grid-area: session;
+  padding: 10px;
+  border-radius: 10px;
 }
 #timer-label {
+  margin: 10px;
   grid-area: timer;
+  background-color: #9989b7;
+  border-radius: 10px;
 }
 #controls {
   grid-area: control;
+}
+.display {
+  font-size: 25px;
 }
