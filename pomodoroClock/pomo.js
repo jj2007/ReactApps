@@ -65,11 +65,6 @@ class Pomodoro extends React.Component {
             Down
           </button>
         </div>
-        <Timer
-          id="timer-label"
-          breaks={this.state.breaks}
-          session={this.state.session}
-        />
         <PlayPause
           id="controls"
           breaks={this.state.breaks}
@@ -80,33 +75,46 @@ class Pomodoro extends React.Component {
   }
 }
 
-class Timer extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const { id, breaks, session } = this.props;
-    return (
-      <div id={id}>
-        <div id="timerdisplay">
-          <h2>Session Time</h2>
-        </div>
-        <div id="timeleft" />
-      </div>
-    );
-  }
-}
 class PlayPause extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      timeLeft: parseInt(this.props.session * 60, 10),
+      timer: null
+    };
   }
-  startTimer = () => {};
+  componentWillUnmount() {
+    clearInterval(this.state.timer);
+  }
+
+  startTimer = () => {
+    clearInterval(this.state.timer);
+    let mytimer = setInterval(() => {
+      console.log("2: Inside of setInterval");
+      const newTime = this.state.timeLeft - 1;
+      if (newTime == 0) clearInterval(mytimer);
+      this.setState({ timeLeft: newTime });
+    }, 1000);
+    console.log("1: After setInterval");
+    //this.setState({ timeLeft: newTime, timer: mytimer});
+  };
+
   stopTimer = () => {};
-  resetTimer = () => {};
+  resetTimer = () => {
+    //clearInterval(this.state.timer);
+    this.setState({
+      timeLeft: parseInt(this.props.session * 60, 10)
+    });
+  };
   render() {
-    const { id, breaks, sessionsl } = this.props;
+    const { id, breaks, sessions } = this.props;
     return (
-      <div id={id}>
+      <div id="timer-label">
+        <div id="timerdisplay">
+          <h2>Session Time:</h2>
+          <h2>{this.state.timeLeft}:</h2>
+        </div>
+        <div id="timeleft" />
         <button id="start_stop" class="btn" onClick={this.startTimer}>
           <i class="fas fa-play-circle" />
           play
