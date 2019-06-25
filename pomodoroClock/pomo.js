@@ -35,32 +35,58 @@ class Pomodoro extends React.Component {
       });
     }
   };
+  reset = aud => {
+    this.setState({
+      breaks: 5,
+      session: 25
+    });
+    clearInterval(this.mytimer);
+    aud.pause();
+    aud.currentTime = 0;
+  };
   render() {
     return (
       <div id="clock">
         <header>
           <h1>Pomodoro Clock</h1>
+          <h3>Be Productive</h3>
         </header>
         <div id="break-label">
-          <h2>Break Length</h2>
-          <button className="btn btn-danger" onClick={this.handleBreakUp}>
+          <h2>Break Time</h2>
+          <button
+            className="btn btn-danger"
+            onClick={this.handleBreakUp}
+            id="break-increment"
+          >
             <i className="fas fa-arrow-circle-up" />
             Up
           </button>
-          <Display>{this.state.breaks}</Display>
-          <button className="btn btn-danger" onClick={this.handleBreakDown}>
+          <Display id="break-length">{this.state.breaks}</Display>
+          <button
+            className="btn btn-danger"
+            onClick={this.handleBreakDown}
+            id="break-decrement"
+          >
             <i className="fas fa-arrow-circle-down" />
             Down
           </button>
         </div>
         <div id="session-label">
-          <h2>Session Length</h2>
-          <button className="btn btn-danger" onClick={this.handleSessionUp}>
+          <h2>Session Time</h2>
+          <button
+            className="btn btn-danger"
+            onClick={this.handleSessionUp}
+            id="session-increment"
+          >
             <i className="fas fa-arrow-circle-up" />
             Up
           </button>
-          <Display>{this.state.session}</Display>
-          <button className="btn btn-danger" onClick={this.handleSessionDown}>
+          <Display id="session-length">{this.state.session}</Display>
+          <button
+            className="btn btn-danger"
+            onClick={this.handleSessionDown}
+            id="session-decrement"
+          >
             <i className="fas fa-arrow-circle-down" />
             Down
           </button>
@@ -69,6 +95,7 @@ class Pomodoro extends React.Component {
           id="controls"
           breaks={this.state.breaks}
           session={this.state.session}
+          parentreset={this.reset}
         />
       </div>
     );
@@ -80,53 +107,101 @@ class PlayPause extends React.Component {
     super(props);
     this.state = {
       timeLeft: parseInt(this.props.session * 60, 10),
-      timer: null
+      timerState: "stopped",
+      timerRunning: "session"
     };
   }
+  componentDidUpdate(prevProps) {
+    if (this.props.session !== prevProps.session) {
+      this.setState((timeLeft, session) => ({
+        timeLeft: parseInt(this.props.session * 60, 10)
+      }));
+    }
+  }
   componentWillUnmount() {
-    clearInterval(this.state.timer);
+    clearInterval(this.mytimer);
   }
 
   startTimer = () => {
-    clearInterval(this.state.timer);
-    let mytimer = setInterval(() => {
-      console.log("2: Inside of setInterval");
-      const newTime = this.state.timeLeft - 1;
-      if (newTime == 0) clearInterval(mytimer);
-      this.setState({ timeLeft: newTime });
-    }, 1000);
-    console.log("1: After setInterval");
-    //this.setState({ timeLeft: newTime, timer: mytimer});
+    if (this.state.timerState === "stopped") {
+      if (this.state.timerRunning == "session" && this.newTime == 0) {
+        this.setState({ timerRunning: "break" });
+      } else {
+        this.setState({ timerRunning: "session" });
+      }
+      this.setState({ timerState: "running" });
+      this.mytimer = setInterval(() => {
+        console.log("2: Inside of setInterval");
+        const newTime = this.state.timeLeft - 1;
+        if (newTime == 0) {
+          clearInterval(this.mytimer);
+          this.audioRef.play;
+          this.setState({ timerState: "stopped" });
+        }
+        this.setState({ timeLeft: newTime });
+      }, 1000);
+      console.log("1: After setInterval");
+    }
   };
 
-  stopTimer = () => {};
-  resetTimer = () => {
-    //clearInterval(this.state.timer);
+  stopTimer = () => {
+    clearInterval(this.mytimer);
     this.setState({
-      timeLeft: parseInt(this.props.session * 60, 10)
+      timerState: "stopped"
     });
   };
+
+  resetTimer = () => {
+    this.setState({
+      timeLeft: parseInt(this.props.session * 60, 10),
+      timerState: "stopped"
+    });
+    clearInterval(this.mytimer);
+    this.props.parentreset(this.audioRef);
+  };
   render() {
-    const { id, breaks, sessions } = this.props;
+    const { id, session, breaks } = this.props;
+    let mintoDisplay;
+    let sectoDisplay;
+    if (this.state.timeLeft / 60 < 10) {
+      mintoDisplay = "0".concat(parseInt(this.state.timeLeft / 60, 10));
+    } else if (this.state.timeLeft / 60 >= 10) {
+      mintoDisplay = parseInt(this.state.timeLeft / 60, 10);
+    }
+    if (this.state.timeLeft % 60 < 10) {
+      sectoDisplay = "0".concat(parseInt(this.state.timeLeft % 60, 10));
+    } else {
+      sectoDisplay = parseInt(this.state.timeLeft % 60, 10);
+    }
+    if (this.state.timeLeft == 0) {
+      this.audioRef.play;
+    }
     return (
       <div id="timer-label">
-        <div id="timerdisplay">
-          <h2>Session Time:</h2>
-          <h2>{this.state.timeLeft}:</h2>
+        <div id="time-left">
+          <h2>{this.state.timerRunning}</h2>
+          <h2>
+            <b>
+              {mintoDisplay}:{sectoDisplay}
+            </b>
+          </h2>
         </div>
-        <div id="timeleft" />
+        <div id="timecontrol" />
         <button id="start_stop" class="btn" onClick={this.startTimer}>
-          <i class="fas fa-play-circle" />
-          play
+          <i class="fas fa-play-circle fa-2x" />
         </button>
         <button id="start_stop" class="btn" onClick={this.stopTimer}>
-          <i class="fas fa-pause-circle" />
-          pause
+          <i class="fas fa-pause-circle fa-2x" />
         </button>
         <button id="reset" class="btn" onClick={this.resetTimer}>
-          <i class="fas fa-sync-alt" />
-          reset
+          <i class="fas fa-sync-alt fa-2x" />
         </button>
+        <audio
+          ref={aud => (this.audioRef = aud)}
+          id="beep"
+          preload="auto"
+          src="https://goo.gl/6NNLMG"
+        />
       </div>
     );
   }

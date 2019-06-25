@@ -1,3 +1,20 @@
+let colors = [
+  "#00cc7a",
+  "#00cccc",
+  "#ffa31a",
+  "#808000",
+  "#FF6347",
+  "#2c3e50",
+  "#9b4e71",
+  "#56989a",
+  "#d477a6",
+  "#00b38f",
+  "#bbbb77",
+  "#660000",
+  "#52527a",
+  "#669999",
+  "#00cccc"
+]; // stored array for background colors
 const bankOne = [
   {
     keyCode: 81,
@@ -75,7 +92,7 @@ class App extends React.Component {
             </div>
           ))}
         </div>
-        <div id="display" />
+        <div id="display">Click or press a key</div>
       </div>
     );
   }
@@ -96,12 +113,12 @@ class Audio extends React.Component {
       this.btn.focus();
       //setTimeout(() => this.btn.focus(), 100);
       document.getElementById("display").innerHTML = this.props.name;
+      document.getElementById("display").style.backgroundColor =
+        colors[Math.floor(Math.random() * colors.length)];
     }
   };
   playSound = e => {
-    const sound = document.getElementById(this.props.children);
-    sound.currentTime = 0;
-    sound.play();
+    this.audRef.play();
     document.getElementById("display").innerHTML = this.props.name;
   };
   render() {
